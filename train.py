@@ -1,5 +1,5 @@
 import torch
-assert torch.__version__.startswith("1.8")
+# assert torch.__version__.startswith("1.8")
 import torchvision
 import cv2
 
@@ -79,7 +79,7 @@ def train(data_path, should_train):
     cfg.SOLVER.MAX_ITER = 1000
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 2
     # change this when you can use a gpu
-    # cfg.MODEL.DEVICE = "cpu"
+    cfg.MODEL.DEVICE = "cpu"
 
     os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
     trainer = DefaultTrainer(cfg)
@@ -100,7 +100,7 @@ def main():
     #setup the data
     classes = ['Cfos_positive', 'Cfos_neg']
     print("input data path")
-    data_path = input()
+    data_path = "/Users/tannerwatts/Desktop/serotonin-segmentation/"
     print("Need To Train? (T) for true (F) for false")
     should_train = input()
     for d in ["train", "test"]:
@@ -110,7 +110,7 @@ def main():
         )
         MetadataCatalog.get("category_" + d).set(thing_classes=classes)
     microcontroller_metadata = MetadataCatalog.get("category_train")
-    predictor = train()
+    predictor = train(data_path, should_train)
     print("INPUT IMAGE PATH")
     test_dataset_dicts = get_data_dicts(data_path + 'test', classes)
 
