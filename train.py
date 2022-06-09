@@ -53,7 +53,7 @@ def get_data_dicts(directory, classes):
         dataset_dicts.append(record)
     return dataset_dicts
 
-def train(data_path, should_train):
+def train(data_path, should_train, use_gpu):
     '''
     This method trains the model on the labeled images that were specified in get_data_dicts
 
@@ -62,7 +62,7 @@ def train(data_path, should_train):
     # the goal here is to resuse this method without having to re train each iteration
     cfg = get_cfg()
     file_exists = os.path.exists(data_path+'/model_final.pth')
-    if file_exists and should_train == "F":
+    if file_exists or should_train == "F":
         cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")
         cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5
         cfg.DATASETS.TEST = ("test",)
@@ -79,7 +79,8 @@ def train(data_path, should_train):
     cfg.SOLVER.MAX_ITER = 1000
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 2
     # change this when you can use a gpu
-    cfg.MODEL.DEVICE = "cpu"
+    if(use_gpu == "F"):
+        cfg.MODEL.DEVICE = "cpu"
 
     os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
     trainer = DefaultTrainer(cfg)
@@ -100,9 +101,14 @@ def main():
     #setup the data
     classes = ['Cfos_positive', 'Cfos_neg']
     print("input data path")
-    data_path = "/Users/tannerwatts/Desktop/serotonin-segmentation/"
+    user_inp = input()
+    data_path = user_inp
+    if(user_inp == "def"):
+        data_path = "/Users/tannerwatts/Desktop/serotonin-segmentation/"
     print("Need To Train? (T) for true (F) for false")
     should_train = input()
+    print("Use GPU (CUDA)? (T) for true (F) for false")
+    use_gpu = input()
     for d in ["train", "test"]:
         DatasetCatalog.register(
             "category_" + d,
@@ -110,12 +116,13 @@ def main():
         )
         MetadataCatalog.get("category_" + d).set(thing_classes=classes)
     microcontroller_metadata = MetadataCatalog.get("category_train")
-    predictor = train(data_path, should_train)
+    predictor = train(data_path, should_train, use_gpu)
     print("INPUT IMAGE PATH")
     test_dataset_dicts = get_data_dicts(data_path + 'test', classes)
 
     # ask user for image path
     image_path = input()
+    print(d)
     image = cv2.imread(d[image_path])
     outputs = predictor(image)
     v = Visualizer(image[:, :, ::-1],
