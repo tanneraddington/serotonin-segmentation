@@ -1,5 +1,5 @@
-from detectron2.utils.logger import setup_logger
 
+from detectron2.utils.logger import setup_logger
 setup_logger()
 
 from detectron2.data.datasets import register_coco_instances
@@ -10,6 +10,7 @@ from detectron2.structures import BoxMode
 import os
 import numpy as np
 import pickle
+import json
 
 from utils import *
 
@@ -48,21 +49,21 @@ def get_data_dicts(directory, classes):
         dataset_dicts.append(record)
     return dataset_dicts
 
-def train():
-    config_file_path = "COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml"
-    checkpoint_url = "COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml"
+def train(user_path):
+
+    config_file_path = "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"
+    checkpoint_url = "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"
     output_dir = "./output/instance_seg"
     num_classes = 2
     classes = ['Cfos_positive', 'Cfos_neg']
+    train_dataset_name = "cells_train"
+    test_dataset_name = "cells_test"
     device = "cpu"
 
     cfg_save_path = "CI_cfg.pickle"
 
-    # get the path to the data
-    print("input data path")
-    user_inp = input()
-    data_path = user_inp
-    if (user_inp == "def"):
+    data_path = user_path
+    if (user_path == "def"):
         data_path = "/Users/tannerwatts/Desktop/serotonin-segmentation/"
     # register train and test dataset
     for d in ["train", "test"]:
@@ -71,8 +72,27 @@ def train():
             lambda d=d: get_data_dicts(data_path + d, classes)
         )
         MetadataCatalog.get("cells_" + d).set(thing_classes=classes)
-    microcontroller_metadata = MetadataCatalog.get("cells_train")
+    microcontroller_metadata = MetadataCatalog.get(train_dataset_name)
 
     # verify dataset
     plot_samples(dataset_name="cells_train", n=1)
+    cfg = get_train_cfg(config_file_path, checkpoint_url, train_dataset_name, test_dataset_name, num_classes, device, output_dir)
+    with open(cfg_save_path, 'wb') as f:
+        pickle.dump(cfg,f,protocol=pickle.HIGHEST_PROTOCOL)
 
+    os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
+
+    trainer = DefaultTrainer(cfg)
+    trainer.resume_or_load(resume=False)
+    trainer.train()
+
+def main():
+    # get the path to the data
+    print("Input data path:")
+    user_inp = input()
+    train(user_inp)
+
+
+
+if __name__ == '__main__':
+    main()
