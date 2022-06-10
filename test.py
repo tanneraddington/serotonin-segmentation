@@ -17,7 +17,7 @@ def main():
 
     predictor = DefaultPredictor(cfg)
 
-    image_path = "test/m5_1_6_2(4).jpg)"
+    image_path = "/Users/tannerwatts/Desktop/serotonin-segmentation/test/m5_1_6_2(4).jpg"
     predict_image(image_path, predictor)
 
 

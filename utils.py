@@ -52,7 +52,7 @@ def predict_image(image_path,predictor):
     v = Visualizer(im[:,:,::-1], metadata={}, scale= 0.5, instance_mode= ColorMode.SEGMENTATION)
     v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
     plt.figure(figsize=(14,10))
-    plt.imshow(v.get_image)
+    plt.imshow(v.get_image())
     plt.show()
 
 
