@@ -47,9 +47,11 @@ def get_train_cfg(config_file_path, checkpoint_url, train_dataset_name, test_dat
     return cfg
 
 def predict_image(image_path,predictor):
+    meta = MetadataCatalog.get("cells_train")
     im = cv2.imread(image_path)
     outputs = predictor(im)
-    v = Visualizer(im[:,:,::-1], metadata={}, scale= 0.5, instance_mode= ColorMode.SEGMENTATION)
+    print(outputs)
+    v = Visualizer(im[:,:,::-1], metadata=meta, scale= 1.8, instance_mode= ColorMode.SEGMENTATION)
     v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
     plt.figure(figsize=(14,10))
     plt.imshow(v.get_image())

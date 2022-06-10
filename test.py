@@ -13,12 +13,14 @@ def main():
         cfg = pickle.load(f)
 
     cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")
-    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.4
 
     predictor = DefaultPredictor(cfg)
 
-    image_path = "/Users/tannerwatts/Desktop/serotonin-segmentation/test/m5_1_6_2(4).jpg"
+    image_path = "/Users/tannerwatts/Desktop/serotonin-segmentation/prediction_imgs/m5_1_6_3(1).jpg"
+
     predict_image(image_path, predictor)
+
 
 
 

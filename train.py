@@ -72,6 +72,7 @@ def train(user_path):
             lambda d=d: get_data_dicts(data_path + d, classes)
         )
         MetadataCatalog.get("cells_" + d).set(thing_classes=classes)
+
     microcontroller_metadata = MetadataCatalog.get(train_dataset_name)
 
     # verify dataset
