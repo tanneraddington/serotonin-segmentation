@@ -64,6 +64,7 @@ def train(user_path):
 
     data_path = user_path
     if (user_path == "def"):
+        #### change this path ####
         data_path = "/Users/tannerwatts/Desktop/serotonin-segmentation/"
     # register train and test dataset
     for d in ["train", "test"]:

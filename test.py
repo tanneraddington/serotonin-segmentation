@@ -1,4 +1,5 @@
 from detectron2.engine import DefaultPredictor
+import matplotlib.pyplot as plt
 
 import os
 import pickle
@@ -17,10 +18,29 @@ def main():
 
     predictor = DefaultPredictor(cfg)
 
+    ### CHANGE IMAGE PATH HERE ####
     image_path = "/Users/tannerwatts/Desktop/serotonin-segmentation/prediction_imgs/m5_1_6_3(1).jpg"
 
-    predict_image(image_path, predictor)
+    ### CHANGE DIR PATH HERE ###
+    dir_path = "/Users/tannerwatts/Desktop/serotonin-segmentation/prediction_imgs/"
 
+    # loop through each image in a directory.
+    image_list = []
+    index = 1
+    for filename in [file for file in os.listdir(dir_path) if file.endswith('.jpg')]:
+        image_pth = os.path.join(dir_path, filename)
+        # suround with loop
+        print("IMAGE #: " + str(index))
+        print(filename)
+        image_list.append(predict_image(image_pth, predictor))
+        index = index + 1
+
+    for v in image_list:
+        plt.figure(figsize=(14, 10))
+        plt.imshow(v.get_image())
+        plt.show(block=False)
+
+    plt.show()
 
 
 

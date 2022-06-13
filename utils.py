@@ -50,12 +50,19 @@ def predict_image(image_path,predictor):
     meta = MetadataCatalog.get("cells_train")
     im = cv2.imread(image_path)
     outputs = predictor(im)
-    print(outputs)
     v = Visualizer(im[:,:,::-1], metadata=meta, scale= 1.8, instance_mode= ColorMode.SEGMENTATION)
     v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-    plt.figure(figsize=(14,10))
-    plt.imshow(v.get_image())
-    plt.show()
+    cfos_count = 0
+    instances = outputs["instances"].pred_classes
+    instance_size = len(instances)
+    print("TOTAL INSTANCES: " + str(instance_size))
+    for inst in instances:
+        if inst == 0:
+            cfos_count = cfos_count + 1
+    print("NUMBER CFOS: " + str(cfos_count))
+    print("NUMBER CFOS NEGATIVE: " + str(instance_size - cfos_count))
+    print()
+    return v
 
 
 
