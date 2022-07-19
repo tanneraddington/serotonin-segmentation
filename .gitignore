@@ -15,4 +15,3 @@ prediction_imgs/
 /output/last_checkpoint
 /output/instance_seg/metrics.json
 /output/metrics.json
-/output/instance_seg/model_final.pth
