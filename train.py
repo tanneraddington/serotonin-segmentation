@@ -49,11 +49,12 @@ def get_data_dicts(directory, classes):
         dataset_dicts.append(record)
     return dataset_dicts
 
-def train(user_path):
+def train():
 
     config_file_path = "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"
     checkpoint_url = "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"
     output_dir = "./output/instance_seg"
+    ### change here for different number of classes and names ###
     num_classes = 2
     classes = ['Cfos_positive', 'Cfos_neg']
     train_dataset_name = "cells_train"
@@ -62,10 +63,9 @@ def train(user_path):
 
     cfg_save_path = "CI_cfg.pickle"
 
-    data_path = user_path
-    if (user_path == "def"):
-        #### change this path ####
-        data_path = "/Users/tannerwatts/Desktop/serotonin-segmentation/"
+    #### change this path to the path of the train and test datasets ####
+    data_path = "/Users/tannerwatts/Desktop/serotonin-segmentation/"
+
     # register train and test dataset
     for d in ["train", "test"]:
         DatasetCatalog.register(
@@ -90,9 +90,7 @@ def train(user_path):
 
 def main():
     # get the path to the data
-    print("Input data path:")
-    user_inp = input()
-    train(user_inp)
+    train()
 
 
 

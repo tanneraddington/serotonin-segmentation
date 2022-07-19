@@ -3,3 +3,16 @@ test/
 train/
 detecron2/
 prediction_imgs/
+/CI_cfg.pickle
+/output/events.out.tfevents.1654632598.DN0a23023d.SUNet.35910.0
+/output/events.out.tfevents.1654644928.tannerwatts-2.local.37770.0
+/output/events.out.tfevents.1654731626.tannerwatts-2.local.50112.0
+/output/instance_seg/events.out.tfevents.1654800630.DN0a23085b.SUNet.58567.0
+/output/instance_seg/events.out.tfevents.1654801343.DN0a23085b.SUNet.59014.0
+/output/instance_seg/events.out.tfevents.1654801766.DN0a23085b.SUNet.59240.0
+/output/instance_seg/events.out.tfevents.1658269038.DN0a230423.SUNet.25659.0
+/output/instance_seg/last_checkpoint
+/output/last_checkpoint
+/output/instance_seg/metrics.json
+/output/metrics.json
+/output/instance_seg/model_final.pth
